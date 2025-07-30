@@ -1,24 +1,32 @@
 plugins {
-    id 'application'
+    id 'application' //얘를 추가하게 되면 java를 추가 안해도 됨. 얘가 기본적으로 java를 종속하고 있어서 그러함.
+    // id 'java'
 }
 
-repositories {
-    mavenCentral()
+
+repositories { //외부 라이브러리 다운받을 주소 함수mavenCentral() 명시
+    mavenCentral() //의존 라이브러리를 갖고 있는 중앙 저장소 서버의 주소를 지정한다. (라이브러리 다운받을 저장소의 주소를 명시해주면 된다)
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'com.google.guava:guava:33.4.5-jre'
+
+dependencies { //그루비 숏 방식
+
+    //test때
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.1' //테스트할때도 컴파일할때도 쓴다
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' //컴파일때는 안쓰는데 테스트 실행할때 써
+
+    //어플리케이션 실행 때 쓰는거
 }
 
-java {
+
+java { //자바라는 플러그인 옵션 설정
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(21) //자바 버전 지정하는 옵션
     }
 }
 
-application {
+
+application { //어플리케이션 플러그인에 대한 옵션임
     mainClass = 'org.example.myapp.App'
 }
 
@@ -28,4 +36,9 @@ jar {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('run') {
+    standardInput = System.in
+    // 표준 입력을 시스템 입력으로 설정(gradle은 내가 입력하길 기다리지x 이걸 명시해야 내가 입력하는 console입력 장치로 인식)
 }
