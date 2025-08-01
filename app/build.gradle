@@ -1,8 +1,13 @@
 plugins {
-    id 'application' //얘를 추가하게 되면 java를 추가 안해도 됨. 얘가 기본적으로 java를 종속하고 있어서 그러함.
-    // id 'java'
+    id 'java' //스프링부트가 개발자가 어떤 언어로 할지 몰라서 java 포함이 안돼있음
+//    id 'application' //얘를 추가하게 되면 java를 추가 안해도 됨. 얘가 기본적으로 java를 종속하고 있어서 그러함.
+    //이거 스프링부트 run쓸거라 걍 빼고
+    id 'org.springframework.boot' version '3.5.4'
 }
 
+// SpringBoot 의 버전에 맞춰 의존 라이브러리 버전을 관리하는 플러그인
+// (버전 명시안함으로써 알아서 스프링부트3.5.4 와 맞는 버전을 맞춤 단, 저 plugins에 넣지 못한다)
+apply plugin: 'io.spring.dependency-management' //순서가 있어서 이건 plugins 뒤에 둔다
 
 repositories { //외부 라이브러리 다운받을 주소 함수mavenCentral() 명시
     mavenCentral() //의존 라이브러리를 갖고 있는 중앙 저장소 서버의 주소를 지정한다. (라이브러리 다운받을 저장소의 주소를 명시해주면 된다)
@@ -11,11 +16,15 @@ repositories { //외부 라이브러리 다운받을 주소 함수mavenCentral()
 
 dependencies { //그루비 숏 방식
 
+    //어플리케이션 실행 때
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     //test때
     testImplementation 'org.junit.jupiter:junit-jupiter:5.12.1' //테스트할때도 컴파일할때도 쓴다
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher' //컴파일때는 안쓰는데 테스트 실행할때 써
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    //어플리케이션 실행 때 쓰는거
+    developmentOnly 'org.springframework.boot:spring-boot-devtools' //얘를 추가하는 순간 내가 편집하면 알아서 빌드 및 서버가 재시작됨
 }
 
 
@@ -25,10 +34,7 @@ java { //자바라는 플러그인 옵션 설정
     }
 }
 
-
-application { //어플리케이션 플러그인에 대한 옵션임
-    mainClass = 'org.example.myapp.App'
-}
+//어플리케이션 플러그인에 대한 옵션임
 
 jar {
     archiveFileName = 'myapp.jar'
@@ -38,7 +44,9 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.named('run') {
-    standardInput = System.in
-    // 표준 입력을 시스템 입력으로 설정(gradle은 내가 입력하길 기다리지x 이걸 명시해야 내가 입력하는 console입력 장치로 인식)
+
+tasks.withType(JavaExec) { //자바 전체에 적용: JavaExec
+    systemProperty 'sun.stdout.encoding', 'UTF-8' //gradle로 할때 깨지는 건 window는 자동으로 적용 UTF-8이 안돼있어 해줘야함.
+    systemProperty 'sun.stderr.encoding', 'UTF-8'
 }
+
