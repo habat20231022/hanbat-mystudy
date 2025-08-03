@@ -18,6 +18,7 @@ dependencies { //그루비 숏 방식
 
     //어플리케이션 실행 때
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     //test때
     testImplementation 'org.junit.jupiter:junit-jupiter:5.12.1' //테스트할때도 컴파일할때도 쓴다

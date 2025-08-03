@@ -1,0 +1,13 @@
+server:
+  port: 9999 # 서버 포트 번호
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: myapp # 애플리케이션 이름
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/ #임시적으로 file 경로를 여기로 지정 (개발동안만)
+  thymeleaf:
+    prefix: file:src/main/resources/templates/ #classpath:/templates/ #안적으면 이게 기본값 얘도 classes 해줘야 바뀜. static 리소스랑 같은 경우임.
+    suffix: .html
